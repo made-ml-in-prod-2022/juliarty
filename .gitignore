@@ -1,2 +1,5 @@
 .idea/
 *-checkpoint.ipynb
+*.hydra/
+
+*.log

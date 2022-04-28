@@ -1,3 +1,0 @@
-input_data_path: "data/raw/heart_cleveland_upload.csv"
-output_model_path: "models/model.pkl"
-metric_path: "models/metrics.json"

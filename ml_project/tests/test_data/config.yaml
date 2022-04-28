@@ -1,0 +1,21 @@
+input_data_path: data/raw/heart_cleveland_upload.csv
+output_model_path: models/model.pkl
+metric_path: models/metrics.json
+features:
+  all_features:
+  - feature_1
+  - feature_2
+  features_to_drop: [feature_1]
+  target: target
+model:
+  model_type: test_model
+  params:
+    random_state: 0
+preprocessing:
+  transformer_type: test_transformer
+  categorical_features:
+    - feature_2
+  random_state: 0
+split:
+  test_size: 0.2
+  random_state: 42

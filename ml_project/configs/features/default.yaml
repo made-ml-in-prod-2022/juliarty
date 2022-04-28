@@ -1,0 +1,16 @@
+all_features:
+  - "sex"
+  - "cp"
+  - "fbs"
+  - "restecg"
+  - "exang"
+  - "slope"
+  - "ca"
+  - "thal"
+  - "oldpeak"
+  - "age"
+  - "trestbps"
+  - "thalach"
+  - "chol"
+features_to_drop: []
+target: "condition"
