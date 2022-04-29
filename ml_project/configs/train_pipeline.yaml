@@ -7,6 +7,15 @@ defaults:
   - override hydra/job_logging: colorlog
   - override hydra/hydra_logging: colorlog
 
-input_data_path: "data/raw/heart_cleveland_upload.csv"
-output_model_path: "models/model.pkl"
-metric_path: "models/metrics.json"
+hydra:
+    run:
+      dir: outputs/${model.model_type}/
+    job_logging:
+      handlers:
+        file:
+          mode: 'w'
+metric: [accuracy, f1-score]
+input_data_path: data/raw/heart_cleveland_upload.csv
+output_model_path: outputs/${model.model_type}/model.pkl
+metric_path: outputs/${model.model_type}/metrics.json
+save_output: true

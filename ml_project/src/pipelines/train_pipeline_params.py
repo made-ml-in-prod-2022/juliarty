@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from data.features_params import FeatureParams
-from data.split_params import SplittingParams
-from preprocessing.preprocessing_params import PreprocessingParams
-from models.model_params import ModelParams
 from marshmallow_dataclass import class_schema
+from typing import List
+
+from .data import FeatureParams, SplittingParams
+from .preprocessing import PreprocessingParams
+from .models import ModelParams
 
 
 @dataclass()
@@ -13,8 +14,10 @@ class TrainingPipelineParams:
     metric_path: str
     features: FeatureParams
     model: ModelParams
+    metric: List[str]
     preprocessing: PreprocessingParams
     split: SplittingParams
+    save_output: bool
 
 
 TrainingPipelineParamsSchema = class_schema(TrainingPipelineParams)

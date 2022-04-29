@@ -1,11 +1,17 @@
 import numpy as np
 import pandas as pd
-from .model_params import ModelParams
+import logging
+
 from typing import Union
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
+from .model_params import ModelParams
+
+
 SklearnClassifierModel = Union[LogisticRegression, RandomForestClassifier]
+
+logger = logging.getLogger(__name__)
 
 
 def train(
@@ -15,11 +21,18 @@ def train(
 ) -> SklearnClassifierModel:
     """
     Returns a model described in `model_params` trained on features provided.
+
+    Raises: ValueError if model_type is unknown.
     """
+
     if model_params.model_type == "LogisticRegression":
         model = LogisticRegression(**model_params.params)
-    else:
+    elif model_params.model_type == "RandomForestClassifier":
         model = RandomForestClassifier(**model_params.params)
+    else:
+        error_message = f"Unknown model type: {model_params.model_type}."
+        logger.error(error_message)
+        raise ValueError(error_message)
 
     model.fit(features, target)
     return model

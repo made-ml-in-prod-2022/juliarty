@@ -3,11 +3,11 @@ ML in production. Homework 1.
 
 RUN train:
    cd ml_project
-   PYTHONPATH='.' python src/train_pipeline.py 
+   python -m src.pipelines.train_pipeline
 
 RUN tests:
    cd ml_project
-   PYTHONPATH='src' pytest
+   pytest
 
 1. To fetch data:
    1. Use Kaggle public API (https://www.kaggle.com/docs/api). 

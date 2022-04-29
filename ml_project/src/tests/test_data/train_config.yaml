@@ -1,0 +1,46 @@
+metric:
+- accuracy
+- f1-score
+input_data_path: data/raw/heart_cleveland_upload.csv
+output_model_path: outputs/LogisticRegression/model.pkl
+metric_path: outputs/LogisticRegression/metrics.json
+features:
+  all_features:
+  - sex
+  - cp
+  - fbs
+  - restecg
+  - exang
+  - slope
+  - ca
+  - thal
+  - oldpeak
+  - age
+  - trestbps
+  - thalach
+  - chol
+  features_to_drop: []
+  target: condition
+model:
+  model_type: LogisticRegression
+  params:
+    max_iter: 1000
+    penalty: l2
+    C: 1.0
+    random_state: 42
+preprocessing:
+  transformer_type: OneHotTransformer
+  categorical_features:
+  - sex
+  - cp
+  - fbs
+  - restecg
+  - exang
+  - slope
+  - ca
+  - thal
+  random_state: 42
+split:
+  test_size: 0.2
+  random_state: 42
+save_output: false
