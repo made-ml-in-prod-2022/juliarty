@@ -21,7 +21,7 @@ def get_data(
         feature_params: Describes all features and target to be included.
         data_path: Path to a csv file.
 
-    Returns: Tuple[pd.DataFrame, pd.Series] (features, target) or pd.DataFrame (features).
+    Returns: (features, target) or target.
     """
     df = pd.read_csv(data_path)
 
