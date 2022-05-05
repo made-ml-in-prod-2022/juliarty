@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
+import logging
 
 from typing import Tuple, Union
 from sklearn.model_selection import train_test_split
 from .features_params import FeatureParams
 from .split_params import SplittingParams
+
+logger = logging.getLogger(__name__)
 
 
 def get_data(
@@ -44,4 +47,5 @@ def split_data(
         test_size=split_params.test_size,
         random_state=split_params.random_state,
     )
+    logger.info(f'Split data. Test size: {split_params.test_size}')
     return features_train, features_test, y_train, y_test

@@ -35,4 +35,6 @@ def train(
         raise ValueError(error_message)
 
     model.fit(features, target)
+    logger.info(f'Fit Model: {model.__str__()}')
+
     return model

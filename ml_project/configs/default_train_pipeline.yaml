@@ -3,7 +3,7 @@ defaults:
   - features: default
   - model: logistic
   - preprocessing: one_hot_transformer
-  - split: train_test_split
+  - split: default
   - override hydra/job_logging: colorlog
   - override hydra/hydra_logging: colorlog
 

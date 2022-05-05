@@ -1,0 +1,9 @@
+all_features:
+  - "cp"
+  - "exang"
+  - "slope"
+  - "thal"
+  - "oldpeak"
+  - "thalach"
+features_to_drop: []
+target: "condition"

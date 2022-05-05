@@ -78,7 +78,7 @@ def save_metrics(metrics: dict, pipeline_params: TrainingPipelineParams) -> None
         json.dump(metrics, f)
 
 
-@hydra.main(config_path="../../configs", config_name="train_pipeline.yaml")
+@hydra.main(config_path="../../configs", config_name="default_train_pipeline.yaml")
 def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> dict:
     # By default, hydra has .outputs/ as a working directory
     # That doesn't let to use relative paths in the config.yaml
