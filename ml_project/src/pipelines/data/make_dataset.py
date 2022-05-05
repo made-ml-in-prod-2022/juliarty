@@ -11,19 +11,24 @@ logger = logging.getLogger(__name__)
 
 
 def get_data(
-    data_path: str, feature_params: FeatureParams
-) -> Tuple[pd.DataFrame, pd.Series]:
+    data_path: str, feature_params: FeatureParams, with_target=False
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.Series]]:
     """
     Gets features and target from **.csv** file according `feature_params`.
 
     Args:
+        with_target: Whether to add target column to output
         feature_params: Describes all features and target to be included.
         data_path: Path to a csv file.
 
-    Returns: Tuple[pd.DataFrame, pd.Series] (features, target).
+    Returns: Tuple[pd.DataFrame, pd.Series] (features, target) or pd.DataFrame (features).
     """
     df = pd.read_csv(data_path)
-    return df[feature_params.all_features], df[feature_params.target]
+
+    if with_target:
+        return df[feature_params.all_features], df[feature_params.target]
+    else:
+        return df[feature_params.all_features]
 
 
 def split_data(
@@ -47,5 +52,5 @@ def split_data(
         test_size=split_params.test_size,
         random_state=split_params.random_state,
     )
-    logger.info(f'Split data. Test size: {split_params.test_size}')
+    logger.info(f"Split data. Test size: {split_params.test_size}")
     return features_train, features_test, y_train, y_test

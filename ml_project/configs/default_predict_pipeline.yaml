@@ -3,19 +3,18 @@ defaults:
   - features: default
   - model: logistic
   - preprocessing: one_hot_transformer
-  - split: default
   - override hydra/job_logging: colorlog
   - override hydra/hydra_logging: colorlog
 
 hydra:
     run:
-      dir: outputs/train/${model.model_type}/
+      dir: outputs/inference/${model.model_type}/
     job_logging:
       handlers:
         file:
           mode: 'w'
-metric: [accuracy, f1-score]
 input_data_path: data/raw/heart_cleveland_upload.csv
-output_model_path: outputs/train/${model.model_type}/model.pkl
-metric_path: outputs/train/${model.model_type}/metrics.json
+model_path: outputs/train/${model.model_type}/model.pkl
+transformer_path: outputs/train/${model.model_type}/transformer.pkl
+output_inference_data_path: outputs/inference/${model.model_type}/inference.csv
 save_output: true

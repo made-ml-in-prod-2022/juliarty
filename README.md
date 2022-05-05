@@ -11,9 +11,13 @@ RUN train with default config:
    cd ml_project
    python -m src.pipelines.train_pipeline
 
-RUN train with overrode config (all pipelines' configs are in configs/pipeline folder):
+RUN train with overrode config (all pipelines' configs are in configs/train_pipelines folder):
    cd ml_project
-   python -m src.pipelines.train_pipeline [+pipelines=PIPELINE_CONFIG_NAME]
+   python -m src.pipelines.train_pipeline [+train_pipelines=PIPELINE_CONFIG_NAME]
+
+Run predict with default config:
+    cd ml_project
+    python -m src.pipelines.predict_pipeline
 
 RUN tests:
    cd ml_project
@@ -32,22 +36,26 @@ RUN tests:
 │   └── EDA.ipynb
 │
 ├── configs            <- Конфигурации проекта в формате .yaml
-│   ├── pipelines 
+│   ├── train_pipelines      <- Измененные default конфигурации train пайплайнов
 │   ├── features
 │   ├── model
 │   ├── preprocessing
-│   └── split
+│   ├── split
+│   ├── default_train_pipeline.yaml
+│   └── default_predict_pipeline.yaml
 │   
 ├── requirements.txt  
 │
 ├── outputs            <- Все артефакты создаваемые пайплайнами (модели, метрики, используемые конфигурационные файлы).  
+│   ├── train
+│   └── inference
 └── src                <- Исходный код.
     ├── __init__.py    
     ├── tests
     └── pipelines
         ├── __init__.py
-        ├── train_pipeline.py
-        ├── predict_pipeline.py
+        ├── train_pipeline.py   
+        ├── predict_pipeline.py 
         │
         ├── data           <- Модули, содержащие код для предобработки данных.
         │   ├── __init__.py
@@ -66,25 +74,26 @@ RUN tests:
             ├── predict_model.py  
             └── train_model.py    
 
-- Для тренировки модели и использования обученной модели созданы соответствующие пайплайны (см. папку pipelines).
+- Для тренировки модели и использования обученной модели созданы соответствующие пайплайны (src/pipelines).
 - Проект имеет модульную структуру (за каждую часть пайплайна отвечает определенный пакет).
 - Для конфигурирования использована hydra.
 - Данные являются частью проекта (так неправильно, но так проще).
-
+- Артефакты сохраняются в папке outputs/train, outputs/inference.
 
 1. В описании к пулл реквесту описаны основные "архитектурные" и тактические решения. (1/1)
 2. В пулл-реквесте проведена самооценка (1/1)
 3. Выполнено EDA и прототипирование. Нет скрипта (1/2)
 4. Написана функция/класс для тренировки модели, вызов оформлен как утилита командной строки, записана в readme инструкция по запуску (3/3)
 5. Написана функция/класс predict (вызов оформлен как утилита командной строки), которая примет на вход артефакт/ы от обучения, 
-   тестовую выборку (без меток) и запишет предикт по заданному пути, инструкция по вызову записана в readme (0/3)
+   тестовую выборку (без меток) и запишет предикт по заданному пути, инструкция по вызову записана в readme (3/3)
 6. Проект имеет модульную структуру. Описание структуры проекта в README.md (2/2)
 7. Использованы логгеры (2/2)
    - Используется модуль logging в основных модулях (пайплайны, обучение, получение датасета).
    - Настройки модуля - измененнные настройки логгера hydra (вывод в файл и в консоль).
    - Логи подсвечиваются в консоли.
-8. Написаны тесты на отдельные модули и на прогон обучения и predict (Частично, только для трейна: 1/3)
-9. Для тестов генерируются синтетические данные, приближенные к реальным (0/2)
+8. Написаны тесты на отдельные модули и на прогон обучения и predict (Частично, только для пайпланов и загрузки их конфигов: 2/3)
+9. Для тестов генерируются синтетические данные, приближенные к реальным. (0.5/2)
+   Только для тестирования inference (случайные значения features и target с помощью numpy.random)
 10. Обучение модели конфигурируется с помощью конфигов yaml. (3/3) 
     Есть две конфигурации (отличаются модели, признаки и параметры разбиения на train, test):
     - configs/default_train_pipeline.yaml

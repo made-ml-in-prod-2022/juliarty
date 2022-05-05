@@ -1,4 +1,3 @@
-import os
 import pickle
 import hydra
 import json
@@ -6,12 +5,11 @@ import numpy as np
 import pandas as pd
 import logging
 
-from hydra.core.hydra_config import HydraConfig
-from hydra.utils import get_original_cwd
 from omegaconf import DictConfig
 from typing import Union
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
+from .utils import create_directory, init_hydra
 from .data import get_data, split_data
 from .train_pipeline_params import get_training_pipeline_params, TrainingPipelineParams
 from .models import SklearnClassifierModel, train
@@ -55,15 +53,6 @@ def validate_model(
     return metric_scores
 
 
-def create_directory(file_path: str) -> None:
-    """
-    Creates a directory for a `file_path` if a specified directory doesn't exist.
-    """
-    directory = os.path.dirname(file_path)
-    if not os.path.exists(directory):
-        os.mkdir(directory)
-
-
 def save_model(
     model: SklearnClassifierModel, pipeline_params: TrainingPipelineParams
 ) -> None:
@@ -80,10 +69,7 @@ def save_metrics(metrics: dict, pipeline_params: TrainingPipelineParams) -> None
 
 @hydra.main(config_path="../../configs", config_name="default_train_pipeline.yaml")
 def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> dict:
-    # By default, hydra has .outputs/ as a working directory
-    # That doesn't let to use relative paths in the config.yaml
-    if HydraConfig.initialized():
-        os.chdir(get_original_cwd())
+    init_hydra()
 
     logger.info("Started training.")
 
@@ -96,7 +82,7 @@ def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> d
 
     logger.info("Load data.")
     features, target = get_data(
-        pipeline_params.input_data_path, pipeline_params.features
+        pipeline_params.input_data_path, pipeline_params.features, True
     )
 
     logger.info("Preprocess data.")
