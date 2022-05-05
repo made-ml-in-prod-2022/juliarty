@@ -6,23 +6,31 @@ Download dataset:
       - cd ml_project/data/raw
       - kaggle datasets download -d cherngs/heart-disease-cleveland-uci
       - unzip heart-disease-cleveland-uci.zip 
-        - rm heart-disease-cleveland-uci.zip 
+      - rm heart-disease-cleveland-uci.zip
+
+
 RUN train with default config:
+```
    cd ml_project
    python -m src.pipelines.train_pipeline
+```
 
 RUN train with overrode config (all pipelines' configs are in configs/train_pipelines folder):
+```
    cd ml_project
    python -m src.pipelines.train_pipeline [+train_pipelines=PIPELINE_CONFIG_NAME]
+```
 
 Run predict with default config:
+```
     cd ml_project
     python -m src.pipelines.predict_pipeline
-
+```
 RUN tests:
+```
    cd ml_project
    pytest
-
+```
 
 Архитектурные решения:
 - Проект ml-project представляет собой пакет Python. Структура пакета (заимствована стуктура cookiecutter-data-science):
