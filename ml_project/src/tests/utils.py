@@ -21,7 +21,8 @@ def create_random_dataset(dataset_path: str, feature_params: FeatureParams) -> N
             list(features.columns.values) + [feature_params.target.name]
         )
         for i in range(len(features)):
-            # Generator is used because iloc() and loc() change the type of all features to float64
+            # Generator is used because iloc() and loc()
+            # change the type of all features to float64
             csv_writer.writerow(
                 [features[name][i] for name in list(features.columns.values)]
                 + [target[i]]
