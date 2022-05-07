@@ -9,7 +9,9 @@ from ml_project.src.pipelines.utils import create_directory
 
 def create_random_dataset(dataset_path: str, feature_params: FeatureParams) -> None:
     """
-    Saves a randomly generated dateset with features that correspond to `features_params`.
+    Saves a randomly generated dateset with features
+    that correspond to `features_params`.
+
     The dataset is saved in the file `file_path` in .csv format.
     """
     create_directory(dataset_path)
