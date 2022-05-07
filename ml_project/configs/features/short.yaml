@@ -1,9 +1,4 @@
-all_features:
-  - "cp"
-  - "exang"
-  - "slope"
-  - "thal"
-  - "oldpeak"
-  - "thalach"
-features_to_drop: []
-target: "condition"
+defaults:
+  - default
+
+features_to_drop: ["sex", "oldpeak", "age", "trestbps", "thalach", "chol"]

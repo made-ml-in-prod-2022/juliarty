@@ -1,11 +1,2 @@
 transformer_type: "OneHotTransformer"
-categorical_features:
-  - "sex"
-  - "cp"
-  - "fbs"
-  - "restecg"
-  - "exang"
-  - "slope"
-  - "ca"
-  - "thal"
 random_state: 42
