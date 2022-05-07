@@ -6,3 +6,4 @@ ml_project/outputs
 *.log
 .coverage
 coverage.xml
+ml_project/src/tests/test_data/tmp/

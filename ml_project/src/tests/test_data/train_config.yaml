@@ -1,9 +1,10 @@
 metric:
 - accuracy
 - f1-score
-input_data_path: src/tests/test_data/dataset.csv
-output_model_path: outputs/LogisticRegression/model.pkl
-metric_path: outputs/LogisticRegression/metrics.json
+input_data_path: src/tests/test_data/tmp/dataset.csv
+output_model_path: src/tests/test_data/tmp/model.pkl
+output_transformer_path: src/tests/test_data/tmp/transformer.pkl
+metric_path: src/tests/test_data/tmp/metrics.json
 features:
   all_features:
     - "sex"
@@ -70,17 +71,7 @@ model:
     random_state: 42
 preprocessing:
   transformer_type: OneHotTransformer
-  categorical_features:
-  - sex
-  - cp
-  - fbs
-  - restecg
-  - exang
-  - slope
-  - ca
-  - thal
-  random_state: 42
 split:
   test_size: 0.2
   random_state: 42
-save_output: false
+save_output: true

@@ -6,11 +6,12 @@ import pandas as pd
 import logging
 
 from omegaconf import DictConfig
-from typing import Union
+from typing import Union, Any
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
+from .preprocessing import create_transformer
 from .utils import create_directory, init_hydra
-from .data import get_data, split_data
+from .data import load_data, split_data
 from .train_pipeline_params import get_training_pipeline_params, TrainingPipelineParams
 from .models import SklearnClassifierModel, train
 
@@ -53,12 +54,10 @@ def validate_model(
     return metric_scores
 
 
-def save_model(
-    model: SklearnClassifierModel, pipeline_params: TrainingPipelineParams
-) -> None:
-    create_directory(pipeline_params.output_model_path)
-    with open(pipeline_params.output_model_path, "wb") as f:
-        pickle.dump(model, f)
+def pickle_object(obj: Any, file_path: str):
+    create_directory(file_path)
+    with open(file_path, "wb") as f:
+        pickle.dump(obj, f)
 
 
 def save_metrics(metrics: dict, pipeline_params: TrainingPipelineParams) -> None:
@@ -81,26 +80,41 @@ def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> d
         pipeline_params = get_training_pipeline_params(dict(cfg))
 
     logger.info("Load data.")
-    features, target = get_data(
+    features, target = load_data(
         pipeline_params.input_data_path, pipeline_params.features, True
     )
 
-    logger.info("Preprocess data.")
+    logger.info("Splitting data.")
     features_train, features_test, target_train, target_test = split_data(
         features, target, pipeline_params.split
     )
+
+    logger.info("Preprocessing data.")
+    categorical_features = [
+        f.name for f in pipeline_params.features.categorical_features
+    ]
+    numerical_features = [f.name for f in pipeline_params.features.numerical_features]
+    transformer = create_transformer(
+        params=pipeline_params.preprocessing,
+        categorical_features=categorical_features,
+        numerical_features=numerical_features,
+    )
+    features_train = transformer.fit_transform(features_train)
+    logger.info(f"Fit transformer: {transformer.__str__()}")
 
     logger.info("Fitting model.")
     model = train(features_train, target_train, pipeline_params.model)
 
     logger.info("Validating model.")
+    features_test = transformer.transform(features_test)
     metrics = validate_model(model, features_test, target_test, pipeline_params)
     logger.info(f"Metrics: {metrics}")
 
     if pipeline_params.save_output:
         logger.info("Saving results.")
         save_metrics(metrics, pipeline_params)
-        save_model(model, pipeline_params)
+        pickle_object(model, pipeline_params.output_model_path)
+        pickle_object(transformer, pipeline_params.output_transformer_path)
 
     return metrics
 

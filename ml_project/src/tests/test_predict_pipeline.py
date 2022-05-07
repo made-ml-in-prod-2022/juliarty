@@ -1,3 +1,4 @@
+from .utils import prepare_predict_artefacts, remove_predict_artefacts
 from ..pipelines.predict_pipeline_params import (
     PredictPipelineParams,
     get_predict_pipeline_params,
@@ -11,6 +12,7 @@ import os
 
 TEST_DIR = os.path.dirname(__file__)
 TEST_DATA_PATH = os.path.join(TEST_DIR, "test_data")
+TEST_CONFIG_PATH = os.path.join(TEST_DATA_PATH, "predict_config.yaml")
 
 
 def load_config(config_path: str) -> PredictPipelineParams:
@@ -21,20 +23,16 @@ def load_config(config_path: str) -> PredictPipelineParams:
 
 class TestPredictPipeline:
     def test_get_predict_pipeline_params(self):
-        test_config_path = os.path.join(TEST_DATA_PATH, "predict_config.yaml")
         try:
-            load_config(test_config_path)
+            load_config(TEST_CONFIG_PATH)
         except Exception:
             pytest.fail("Problem with a configuration file.")
 
     def test_predict_pipeline(self):
-        test_config_path = os.path.join(TEST_DATA_PATH, "predict_config.yaml")
-        pipeline_params = load_config(test_config_path)
-        from ml_project.src.tests.utils import create_model
+        pipeline_params = load_config(TEST_CONFIG_PATH)
 
-        create_model(
-            pipeline_params.model_path, pipeline_params.model, pipeline_params.features
-        )
+        prepare_predict_artefacts(pipeline_params)
+
         start_predict_pipeline(pipeline_params)
 
-        os.remove(pipeline_params.model_path)
+        remove_predict_artefacts(pipeline_params)

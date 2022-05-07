@@ -17,5 +17,6 @@ hydra:
 metric: [accuracy, f1-score]
 input_data_path: data/raw/heart_cleveland_upload.csv
 output_model_path: outputs/train/${model.model_type}/model.pkl
+output_transformer_path: outputs/train/${model.model_type}/transformer.pkl
 metric_path: outputs/train/${model.model_type}/metrics.json
 save_output: true

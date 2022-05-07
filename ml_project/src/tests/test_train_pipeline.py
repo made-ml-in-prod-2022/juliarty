@@ -1,4 +1,4 @@
-from .utils import create_random_dataset
+from .utils import prepare_dataset
 from ..pipelines.train_pipeline_params import (
     get_training_pipeline_params,
     TrainingPipelineParams,
@@ -8,9 +8,11 @@ import yaml
 import pytest
 import os
 
+from ..pipelines.utils import create_directory
 
 TEST_DIR = os.path.dirname(__file__)
 TEST_DATA_PATH = os.path.join(TEST_DIR, "test_data")
+TEST_CONFIG_PATH = os.path.join(TEST_DATA_PATH, "train_config.yaml")
 
 
 def load_config(config_path: str) -> TrainingPipelineParams:
@@ -21,16 +23,15 @@ def load_config(config_path: str) -> TrainingPipelineParams:
 
 class TestTrainPipeline:
     def test_get_training_pipeline_params(self):
-        test_config_path = os.path.join(TEST_DATA_PATH, "train_config.yaml")
         try:
-            load_config(test_config_path)
+            load_config(TEST_CONFIG_PATH)
         except Exception:
             pytest.fail("Problem with a configuration file.")
 
     def test_train_pipeline(self):
-        test_config_path = os.path.join(TEST_DATA_PATH, "train_config.yaml")
-        pipeline_params = load_config(test_config_path)
-        create_random_dataset(pipeline_params.input_data_path, pipeline_params.features)
+        pipeline_params = load_config(TEST_CONFIG_PATH)
+        prepare_dataset(pipeline_params)
+        create_directory(pipeline_params.output_model_path)
         start_training_pipeline(pipeline_params)
 
         os.remove(pipeline_params.input_data_path)

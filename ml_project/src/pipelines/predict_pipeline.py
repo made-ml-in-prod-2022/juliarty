@@ -8,10 +8,9 @@ import csv
 from omegaconf import DictConfig
 from typing import Union
 
-from sklearn.base import BaseEstimator
-
+from .preprocessing import CustomTransformerClass
 from .utils import init_hydra, create_directory
-from .data import get_data
+from .data import load_data
 from .predict_pipeline_params import get_predict_pipeline_params, PredictPipelineParams
 from .models import SklearnClassifierModel, predict
 
@@ -27,7 +26,7 @@ def load_model(pipeline_params: PredictPipelineParams) -> SklearnClassifierModel
     return model
 
 
-def load_transformer(pipeline_params: PredictPipelineParams) -> BaseEstimator:
+def load_transformer(pipeline_params: PredictPipelineParams) -> CustomTransformerClass:
     with open(pipeline_params.transformer_path, "rb") as f:
         transformer = pickle.load(f)
 
@@ -56,14 +55,19 @@ def start_predict_pipeline(cfg: Union[DictConfig, PredictPipelineParams]) -> dic
         pipeline_params = get_predict_pipeline_params(dict(cfg))
 
     logger.info("Load data.")
-    features = get_data(
+    features = load_data(
         pipeline_params.input_data_path, pipeline_params.features, False
     )
 
-    logger.info("Preprocess data.")
-
     logger.info("Loading model.")
     model = load_model(pipeline_params)
+    logger.info(f"Model: {model.__str__()}")
+
+    logger.info("Loading transformer")
+    transformer = load_transformer(pipeline_params)
+    logger.info(f"Transformer: {transformer.__str__()}")
+
+    features = transformer.transform(features)
 
     logger.info("Predicting.")
     inference_data = predict(model, features)

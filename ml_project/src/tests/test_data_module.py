@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-from ml_project.src.pipelines.data import generate_train_data, FeatureParams
 from ml_project.src.pipelines.data.features_params import (
     NumericalFeatureParams,
     CategoricalFeatureParams,
 )
+from ml_project.src.tests.utils import generate_sample_dataset
 
 
 def check_numerical_feature(values: pd.Series, feature_params: NumericalFeatureParams):
@@ -32,47 +32,21 @@ def check_categorical_feature(
 
 class TestDataModule:
     def test_data_generation(self):
-        discrete_feature_range = [-100, 100]
-        categorical_features_categories = [0, 1, 2]
-        continuous_feature_range = [0, 1]
-        target_categories = [0, 1]
-        discrete_1 = NumericalFeatureParams(
-            name="discrete_1",
-            type="discrete",
-            min=discrete_feature_range[0],
-            max=discrete_feature_range[1],
-        )
+        sample_dataset = generate_sample_dataset()
 
-        continuous_1 = NumericalFeatureParams(
-            name="continuous_1",
-            type="continuous",
-            min=continuous_feature_range[0],
-            max=continuous_feature_range[1],
-        )
+        for discrete_feature in sample_dataset.discrete_features:
+            check_numerical_feature(
+                sample_dataset.features[discrete_feature.name], discrete_feature
+            )
 
-        categorical_1 = CategoricalFeatureParams(
-            name="cat_1", categories=categorical_features_categories
-        )
-        target_feature_params = CategoricalFeatureParams(
-            name="target", categories=target_categories
-        )
+        for continuous_feature in sample_dataset.continuous_features:
+            check_numerical_feature(
+                sample_dataset.features[continuous_feature.name], continuous_feature
+            )
 
-        feature_params = FeatureParams(
-            all_features=[
-                discrete_1.name,
-                continuous_1.name,
-                categorical_1.name,
-            ],
-            numerical_features=[discrete_1, continuous_1],
-            categorical_features=[categorical_1],
-            target=target_feature_params,
-            features_to_drop=[],
-        )
+        for categorical_features in sample_dataset.categorical_features:
+            check_categorical_feature(
+                sample_dataset.features[categorical_features.name], categorical_features
+            )
 
-        features, target = generate_train_data(100, feature_params)
-
-        check_numerical_feature(features[discrete_1.name], discrete_1)
-        check_numerical_feature(features[continuous_1.name], continuous_1)
-
-        check_categorical_feature(features[categorical_1.name], categorical_1)
-        check_categorical_feature(target, target_feature_params)
+        check_categorical_feature(sample_dataset.target, sample_dataset.target_params)

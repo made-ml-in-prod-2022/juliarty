@@ -14,7 +14,7 @@ from .split_params import SplittingParams
 logger = logging.getLogger(__name__)
 
 
-def get_data(
+def load_data(
     data_path: str, feature_params: FeatureParams, with_target=False
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.Series]]:
     """

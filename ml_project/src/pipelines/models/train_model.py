@@ -14,7 +14,7 @@ SklearnClassifierModel = Union[LogisticRegression, RandomForestClassifier]
 logger = logging.getLogger(__name__)
 
 
-def get_model(model_params: ModelParams) -> SklearnClassifierModel:
+def create_model(model_params: ModelParams) -> SklearnClassifierModel:
     """
     Creates model describes in `model_params`.
     Args:
@@ -45,7 +45,7 @@ def train(
     Raises: ValueError if model_type is unknown.
     """
 
-    model = get_model(model_params)
+    model = create_model(model_params)
     model.fit(features, target)
     logger.info(f"Fit Model: {model.__str__()}")
 
