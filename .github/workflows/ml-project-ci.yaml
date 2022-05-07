@@ -19,6 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest black
         pip install -r ml_project/requirements.txt
+        sudo apt-get install python3-dev gcc
+        pip install coverage
+        pip install pytest-cov
     - name: Format with black
       run: |
         cd ml_project
@@ -30,4 +33,4 @@ jobs:
     - name: Test with pytest
       run: |
         cd ml_project
-        pytest
+        pytest --cov-report=html --cov=src/pipelines src/tests

@@ -4,3 +4,5 @@ ml_project/outputs
 *-checkpoint.ipynb
 *.hydra/
 *.log
+.coverage
+coverage.xml

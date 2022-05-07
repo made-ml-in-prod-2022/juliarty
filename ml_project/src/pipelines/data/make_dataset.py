@@ -113,5 +113,5 @@ def generate_train_data(
     features = pd.DataFrame(
         {name: feature_name_to_samples[name] for name in feature_params.all_features}
     )
-    targets = np.random.choice([0, 1], samples_num)
+    targets = np.random.choice(feature_params.target.categories, samples_num)
     return features, pd.Series(targets)
