@@ -22,15 +22,9 @@ jobs:
         sudo apt-get install python3-dev gcc
         pip install coverage
         pip install pytest-cov
-    - name: Format with black
-      run: |
-        cd ml_project
-        black .
     - name: Lint with flake8
-      run: |
-        cd ml_project
-        flake8 . --count --show-source --statistics --max-line-length=88
+      working-directory: ml_project
+      run: flake8 . --count --show-source --statistics --max-line-length=88
     - name: Test with pytest
-      run: |
-        cd ml_project
-        pytest --cov=src/pipelines src/tests
+      working-directory: ml_project
+      run: pytest --cov=src/pipelines src/tests
