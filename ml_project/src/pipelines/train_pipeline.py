@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
 from .preprocessing import create_transformer
 from .utils import create_directory, init_hydra
-from .data import load_data, split_data
+from .data import load_data, split_data, download_data
 from .train_pipeline_params import get_training_pipeline_params, TrainingPipelineParams
 from .models import SklearnClassifierModel, train
 
@@ -66,7 +66,7 @@ def save_metrics(metrics: dict, pipeline_params: TrainingPipelineParams) -> None
         json.dump(metrics, f)
 
 
-@hydra.main(config_path="../../configs", config_name="default_train_pipeline.yaml")
+@hydra.main(config_path="configs", config_name="default_train_pipeline.yaml")
 def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> dict:
     init_hydra()
 
@@ -78,6 +78,9 @@ def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> d
         pipeline_params = cfg
     else:
         pipeline_params = get_training_pipeline_params(dict(cfg))
+
+    logger.info("Download data.")
+    download_data(pipeline_params.input_data_path)
 
     logger.info("Load data.")
     features, target = load_data(

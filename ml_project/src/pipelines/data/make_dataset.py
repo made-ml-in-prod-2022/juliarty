@@ -1,6 +1,9 @@
+import os.path
+
 import pandas as pd
 import numpy as np
 import logging
+import gdown
 
 from typing import Tuple, Union
 from sklearn.model_selection import train_test_split
@@ -14,12 +17,22 @@ from .split_params import SplittingParams
 logger = logging.getLogger(__name__)
 
 
+def download_data(output_data_path: str) -> None:
+    """
+    If file doesn't exist, it will be downloaded from Google Drive.
+    Args:
+        output_data_path: The path to write the file.
+    """
+    if not os.path.exists(output_data_path):
+        data_url = "https://drive.google.com/uc?id=1Pw3650ra8hVTb9Ybf4WxjbOcVi8oFI8l"
+        gdown.download(data_url, output_data_path, quiet=False)
+
+
 def load_data(
     data_path: str, feature_params: FeatureParams, with_target=False
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.Series]]:
     """
     Gets features and target from **.csv** file according `feature_params`.
-
     Args:
         with_target: Whether to add target column to output
         feature_params: Describes all features and target to be included.

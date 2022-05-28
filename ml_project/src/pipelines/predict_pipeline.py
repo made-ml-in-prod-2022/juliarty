@@ -43,7 +43,7 @@ def save_inference_data(
             csv_writer.writerow([label])
 
 
-@hydra.main(config_path="../../configs", config_name="default_predict_pipeline.yaml")
+@hydra.main(config_path="configs", config_name="default_predict_pipeline.yaml")
 def start_predict_pipeline(cfg: Union[DictConfig, PredictPipelineParams]) -> dict:
     init_hydra()
     logger.info("Started predict pipeline.")

@@ -4,6 +4,12 @@ ml_project/outputs
 *-checkpoint.ipynb
 *.hydra/
 *.log
+*.egg-info
+
 .coverage
 coverage.xml
+
 ml_project/src/tests/test_data/tmp/
+ml_project/build/*
+ml_project/dist/*
+ml_project/data/*
