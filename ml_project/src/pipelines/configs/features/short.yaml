@@ -1,0 +1,4 @@
+defaults:
+  - default
+
+features_to_drop: ["sex", "oldpeak", "age", "trestbps", "thalach", "chol"]

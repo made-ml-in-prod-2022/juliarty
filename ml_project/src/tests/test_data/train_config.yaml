@@ -1,0 +1,77 @@
+metric:
+- accuracy
+- f1-score
+input_data_path: src/tests/test_data/tmp/dataset.csv
+output_model_path: src/tests/test_data/tmp/model.pkl
+output_transformer_path: src/tests/test_data/tmp/transformer.pkl
+metric_path: src/tests/test_data/tmp/metrics.json
+features:
+  all_features:
+    - "sex"
+    - "cp"
+    - "fbs"
+    - "restecg"
+    - "exang"
+    - "slope"
+    - "ca"
+    - "thal"
+    - "oldpeak"
+    - "age"
+    - "trestbps"
+    - "thalach"
+    - "chol"
+  numerical_features:
+    - name: "age"
+      type: discrete
+      min: 29
+      max: 77
+    - name: "trestbps"
+      type: discrete
+      min: 94
+      max: 200
+    - name: "chol"
+      type: discrete
+      min: 126
+      max: 564
+    - name: "thalach"
+      type: discrete
+      min: 71
+      max: 202
+    - name: "oldpeak"
+      type: continuous
+      min: 0
+      max: 6.2
+  categorical_features:
+    - name: "sex"
+      categories: [0, 1]
+    - name: "cp"
+      categories: [0, 1, 2, 3]
+    - name: "fbs"
+      categories: [0, 1]
+    - name: "restecg"
+      categories: [0, 1, 2]
+    - name: "exang"
+      categories: [0, 1]
+    - name: "slope"
+      categories: [0, 1, 2]
+    - name: "ca"
+      categories: [0, 1, 2, 3]
+    - name: "thal"
+      categories: [0, 1, 2]
+  features_to_drop: []
+  target:
+    name: "condition"
+    categories: [ 0, 1 ]
+model:
+  model_type: LogisticRegression
+  params:
+    max_iter: 1000
+    penalty: l2
+    C: 1.0
+    random_state: 42
+preprocessing:
+  transformer_type: OneHotTransformer
+split:
+  test_size: 0.2
+  random_state: 42
+save_output: true

@@ -1,0 +1,8 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - override /features: short
+  - override /model: random_forest
+  - override /split: large_test
+  - override /preprocessing: identity_transformer
