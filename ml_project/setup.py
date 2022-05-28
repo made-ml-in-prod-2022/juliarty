@@ -28,7 +28,7 @@ setup(
              "configs/model/*.yaml",
              "configs/preprocessing/*.yaml",
              "configs/split/*.yaml",
-             "configs/train_pipelines/*.yaml",],
+             "configs/train_pipelines/*.yaml"],
     },
     python_requires=">=3.8, <4",
     install_requires=[
