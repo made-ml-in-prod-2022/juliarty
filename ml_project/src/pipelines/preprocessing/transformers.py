@@ -12,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 class IdentityTransformer(BaseEstimator, TransformerMixin):
-    def fit(self, features: Any):
+    def fit(self, features: Any, targets=None):
         return self
 
-    def transform(self, features) -> Any:
+    def transform(self, features, targets=None) -> Any:
         return features
 
 
@@ -34,7 +34,7 @@ class OneHotTransformer(BaseEstimator, TransformerMixin):
         self._was_fit = False
         self.scale = scale
 
-    def fit(self, features: pd.DataFrame):
+    def fit(self, features: pd.DataFrame, targets=None):
         self._was_fit = True
         self.one_hot_encoder = OneHotEncoder(handle_unknown="ignore").fit(
             features[self.categorical_features]
@@ -46,7 +46,7 @@ class OneHotTransformer(BaseEstimator, TransformerMixin):
 
         return self
 
-    def transform(self, features: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, features: pd.DataFrame, targets=None) -> pd.DataFrame:
         if not self._was_fit:
             logger.warning("The transformer hasn't been fit.")
 

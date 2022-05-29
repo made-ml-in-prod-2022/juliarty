@@ -18,13 +18,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
-        pip install -r ml_project/requirements.txt
         sudo apt-get install python3-dev gcc
         pip install coverage
         pip install pytest-cov
+        pip install -r online_inference/requirements.txt
     - name: Lint with flake8
-      working-directory: ml_project
+      working-directory: online_inference/app
       run: flake8 . --count --show-source --statistics --max-line-length=88
     - name: Test with pytest
-      working-directory: ml_project
-      run: pytest --cov=src/pipelines src/tests
+      working-directory: online_inference
+      run: |
+        export MODEL_GDRIVE_URL=https://drive.google.com/uc?id=1vZktUMqtLQqwTa-X9JaQy3K04u08SR14
+        pytest --cov=app/src app/tests

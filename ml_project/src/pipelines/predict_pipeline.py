@@ -63,12 +63,6 @@ def start_predict_pipeline(cfg: Union[DictConfig, PredictPipelineParams]) -> dic
     model = load_model(pipeline_params)
     logger.info(f"Model: {model.__str__()}")
 
-    logger.info("Loading transformer")
-    transformer = load_transformer(pipeline_params)
-    logger.info(f"Transformer: {transformer.__str__()}")
-
-    features = transformer.transform(features)
-
     logger.info("Predicting.")
     inference_data = predict(model, features)
 

@@ -10,7 +10,7 @@ from typing import Union, Any
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
 from .preprocessing import create_transformer
-from .utils import create_directory, init_hydra
+from .utils import create_directory, init_hydra, get_pipeline
 from .data import load_data, split_data, download_data
 from .train_pipeline_params import get_training_pipeline_params, TrainingPipelineParams
 from .models import SklearnClassifierModel, train
@@ -102,6 +102,7 @@ def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> d
         categorical_features=categorical_features,
         numerical_features=numerical_features,
     )
+
     features_train = transformer.fit_transform(features_train)
     logger.info(f"Fit transformer: {transformer.__str__()}")
 
@@ -116,8 +117,8 @@ def start_training_pipeline(cfg: Union[DictConfig, TrainingPipelineParams]) -> d
     if pipeline_params.save_output:
         logger.info("Saving results.")
         save_metrics(metrics, pipeline_params)
-        pickle_object(model, pipeline_params.output_model_path)
-        pickle_object(transformer, pipeline_params.output_transformer_path)
+        pipeline = get_pipeline(transformer, model)
+        pickle_object(pipeline, pipeline_params.output_model_path)
 
     return metrics
 
