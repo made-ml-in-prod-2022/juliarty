@@ -22,8 +22,10 @@ app = FastAPI()
 
 try:
     pipeline = get_inference_pipeline(config_params.model_path)
-except Exception:
+except Exception as e:
+    logger.error(e)
     pipeline = None
+    download_exception = e
 
 
 class PredictSample(BaseModel):
@@ -75,7 +77,7 @@ async def health():
     if pipeline is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="The model is not ready.",
+            detail=f"The model is not ready. Exception: {download_exception}",
         )
 
     return "That's fine"
