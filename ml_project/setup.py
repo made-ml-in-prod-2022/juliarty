@@ -23,12 +23,14 @@ setup(
     packages=find_packages(where=".", exclude=["tests"]),  # Required
     package_data={
         # If any package contains *.txt files, include them:
-        "": ["configs/*.yaml",
-             "configs/features/*.yaml",
-             "configs/model/*.yaml",
-             "configs/preprocessing/*.yaml",
-             "configs/split/*.yaml",
-             "configs/train_pipelines/*.yaml"],
+        "": [
+            "configs/*.yaml",
+            "configs/features/*.yaml",
+            "configs/model/*.yaml",
+            "configs/preprocessing/*.yaml",
+            "configs/split/*.yaml",
+            "configs/train_pipelines/*.yaml",
+        ],
     },
     python_requires=">=3.8, <4",
     install_requires=[
@@ -47,5 +49,4 @@ setup(
         "Bug Reports": "https://github.com/made-ml-in-prod-2022/juliarty/issues",
         "Source": "https://github.com/made-ml-in-prod-2022/juliarty/",
     },
-
 )

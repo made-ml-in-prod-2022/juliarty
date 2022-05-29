@@ -1,25 +1,36 @@
 import csv
 import os
 import pickle
+
 from typing import List, Union
 
 import pandas as pd
 
 from dataclasses import dataclass
 
-from ml_project.ml_project.pipelines.data import FeatureParams, generate_train_data, load_data
-from ml_project.ml_project.pipelines.data.features_params import (
+from ..pipelines.data import (
+    FeatureParams,
+    generate_train_data,
+    load_data,
+)
+
+from ..pipelines.data.features_params import (
     NumericalFeatureParams,
     CategoricalFeatureParams,
 )
-from ml_project.ml_project.pipelines.models.train_model import create_model
-from ml_project.ml_project.pipelines.predict_pipeline_params import PredictPipelineParams
-from ml_project.ml_project.pipelines.preprocessing import (
+
+from ..pipelines.models.train_model import create_model
+from ..pipelines.predict_pipeline_params import (
+    PredictPipelineParams,
+)
+
+from ..pipelines.preprocessing import (
     create_transformer,
     CustomTransformerClass,
 )
-from ml_project.ml_project.pipelines.train_pipeline_params import TrainingPipelineParams
-from ml_project.ml_project.pipelines.utils import create_directory, get_pipeline
+
+from ..pipelines.train_pipeline_params import TrainingPipelineParams
+from ..pipelines.utils import create_directory, get_pipeline
 
 
 def prepare_dataset(

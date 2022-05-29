@@ -30,5 +30,4 @@ jobs:
       run: |
         export MODEL_GDRIVE_URL=https://drive.google.com/uc?id=1YY9Vo5wxwUOa_42t52zYL4to-wxJtqIY
         export -p
-        pytest --cov=app/src app/tests -v --log-level=INFO
-
+        pytest --cov=src tests -v --log-level=INFO
