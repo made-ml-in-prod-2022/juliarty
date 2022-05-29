@@ -26,9 +26,9 @@ jobs:
       working-directory: online_inference/app
       run: flake8 . --count --show-source --statistics --max-line-length=88
     - name: Test with pytest
-      working-directory: online_inference
+      working-directory: online_inference/app
       run: |
-        export MODEL_GDRIVE_URL=https://drive.google.com/uc?id=1vZktUMqtLQqwTa-X9JaQy3K04u08SR14
+        export MODEL_GDRIVE_URL=https://drive.google.com/uc?id=1YY9Vo5wxwUOa_42t52zYL4to-wxJtqIY
         export -p
         pytest --cov=app/src app/tests -v --log-level=INFO
 

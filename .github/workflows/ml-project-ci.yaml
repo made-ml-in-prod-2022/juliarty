@@ -27,4 +27,4 @@ jobs:
       run: flake8 . --count --show-source --statistics --max-line-length=88
     - name: Test with pytest
       working-directory: ml_project
-      run: pytest --cov=src/pipelines src/tests
+      run: pytest --cov=ml_project/pipelines ml_project/tests

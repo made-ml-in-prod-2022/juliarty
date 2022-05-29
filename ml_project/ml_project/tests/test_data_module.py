@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-from ml_project.src.pipelines.data.features_params import (
+from ml_project.ml_project.pipelines.data.features_params import (
     NumericalFeatureParams,
     CategoricalFeatureParams,
 )
-from ml_project.src.tests.utils import generate_sample_dataset
+from ml_project.ml_project.tests.utils import generate_sample_dataset
 
 
 def check_numerical_feature(values: pd.Series, feature_params: NumericalFeatureParams):

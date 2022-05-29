@@ -1,8 +1,8 @@
 import logging
 import os
 import pickle
-
 import gdown
+
 from sklearn.pipeline import Pipeline
 
 
@@ -18,6 +18,8 @@ def download_artefacts(model_url: str, model_path: str) -> None:
         model_url: The url to download from model.
         model_path: The path to write the model.
     """
+    if not os.path.exists(os.path.dirname(model_path)):
+        os.makedirs(os.path.dirname(model_path))
     logger.info("Downloading the model...")
     gdown.download(model_url, model_path, quiet=False)
 

@@ -1,10 +1,9 @@
 import yaml
 from marshmallow_dataclass import class_schema
-from src.pipelines.data import generate_train_data, FeatureParams
+from ml_project.pipelines.data import generate_train_data, FeatureParams
 
 
-def sample_data() -> dict:
-    features_config_path = "config/features.yaml"
+def sample_data(features_config_path: str = "config/features.yaml") -> dict:
     with open(features_config_path, "r") as f:
         dict_config = yaml.load(f, Loader=yaml.FullLoader)
     feature_params = class_schema(FeatureParams)().load(dict_config)
