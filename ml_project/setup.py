@@ -10,8 +10,8 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 
 setup(
-    name="ml_in_prod_juliarty_ml_project",  # Required
-    version="0.1.0",  # Required
+    name="ml_in_prod_juliarty_ml_project_1",  # Required
+    version="0.2.0",  # Required
     description="That is a homework project",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)
@@ -19,16 +19,18 @@ setup(
     author="Juliarty",  # Optional
     author_email="sirrzk.09@yandex.ru",  # Optional
     keywords="homework ml in prod",  # Optional
-    package_dir={"": "src/"},  # Optional
-    packages=find_packages(where="src", exclude=["tests"]),  # Required
+    package_dir={"": "."},  # Optional
+    packages=find_packages(where=".", exclude=["tests"]),  # Required
     package_data={
         # If any package contains *.txt files, include them:
-        "": ["configs/*.yaml",
-             "configs/features/*.yaml",
-             "configs/model/*.yaml",
-             "configs/preprocessing/*.yaml",
-             "configs/split/*.yaml",
-             "configs/train_pipelines/*.yaml"],
+        "": [
+            "configs/*.yaml",
+            "configs/features/*.yaml",
+            "configs/model/*.yaml",
+            "configs/preprocessing/*.yaml",
+            "configs/split/*.yaml",
+            "configs/train_pipelines/*.yaml",
+        ],
     },
     python_requires=">=3.8, <4",
     install_requires=[
@@ -47,5 +49,4 @@ setup(
         "Bug Reports": "https://github.com/made-ml-in-prod-2022/juliarty/issues",
         "Source": "https://github.com/made-ml-in-prod-2022/juliarty/",
     },
-
 )

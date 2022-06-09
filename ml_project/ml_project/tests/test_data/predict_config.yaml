@@ -1,10 +1,8 @@
-metric:
-- accuracy
-- f1-score
-input_data_path: src/tests/test_data/tmp/dataset.csv
-output_model_path: src/tests/test_data/tmp/model.pkl
-output_transformer_path: src/tests/test_data/tmp/transformer.pkl
-metric_path: src/tests/test_data/tmp/metrics.json
+input_data_path: ml_project/tests/test_data/tmp/dataset.csv
+model_path: ml_project/tests/test_data/tmp/model.pkl
+transformer_path: ml_project/tests/test_data/tmp/transformer.pkl
+output_inference_data_path: ml_project/tests/test_data/tmp/inference.csv
+save_output: true
 features:
   all_features:
     - "sex"
@@ -43,22 +41,22 @@ features:
       max: 6.2
   categorical_features:
     - name: "sex"
-      categories: [0, 1]
+      categories: [ 0, 1 ]
     - name: "cp"
-      categories: [0, 1, 2, 3]
+      categories: [ 0, 1, 2, 3 ]
     - name: "fbs"
-      categories: [0, 1]
+      categories: [ 0, 1 ]
     - name: "restecg"
-      categories: [0, 1, 2]
+      categories: [ 0, 1, 2 ]
     - name: "exang"
-      categories: [0, 1]
+      categories: [ 0, 1 ]
     - name: "slope"
-      categories: [0, 1, 2]
+      categories: [ 0, 1, 2 ]
     - name: "ca"
-      categories: [0, 1, 2, 3]
+      categories: [ 0, 1, 2, 3 ]
     - name: "thal"
-      categories: [0, 1, 2]
-  features_to_drop: []
+      categories: [ 0, 1, 2 ]
+  features_to_drop: [ ]
   target:
     name: "condition"
     categories: [ 0, 1 ]
@@ -71,7 +69,3 @@ model:
     random_state: 42
 preprocessing:
   transformer_type: OneHotTransformer
-split:
-  test_size: 0.2
-  random_state: 42
-save_output: true

@@ -9,7 +9,7 @@ ml_project/outputs
 .coverage
 coverage.xml
 
-ml_project/src/tests/test_data/tmp/
+ml_project/ml_project/tests/test_data/tmp/
 ml_project/build/*
 ml_project/dist/*
 ml_project/data/*

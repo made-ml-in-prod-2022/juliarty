@@ -1,24 +1,36 @@
 import csv
 import os
 import pickle
+
 from typing import List, Union
 
 import pandas as pd
 
 from dataclasses import dataclass
-from ml_project.src.pipelines.data import FeatureParams, generate_train_data, load_data
-from ml_project.src.pipelines.data.features_params import (
+
+from ..pipelines.data import (
+    FeatureParams,
+    generate_train_data,
+    load_data,
+)
+
+from ..pipelines.data.features_params import (
     NumericalFeatureParams,
     CategoricalFeatureParams,
 )
-from ml_project.src.pipelines.models.train_model import create_model
-from ml_project.src.pipelines.predict_pipeline_params import PredictPipelineParams
-from ml_project.src.pipelines.preprocessing import (
+
+from ..pipelines.models.train_model import create_model
+from ..pipelines.predict_pipeline_params import (
+    PredictPipelineParams,
+)
+
+from ..pipelines.preprocessing import (
     create_transformer,
     CustomTransformerClass,
 )
-from ml_project.src.pipelines.train_pipeline_params import TrainingPipelineParams
-from ml_project.src.pipelines.utils import create_directory
+
+from ..pipelines.train_pipeline_params import TrainingPipelineParams
+from ..pipelines.utils import create_directory, get_pipeline
 
 
 def prepare_dataset(
@@ -47,7 +59,7 @@ def prepare_dataset(
             )
 
 
-def prepare_transformer(pipeline_params: PredictPipelineParams):
+def get_transformer(pipeline_params: PredictPipelineParams) -> CustomTransformerClass:
     categorical_features = [
         f.name for f in pipeline_params.features.categorical_features
     ]
@@ -63,8 +75,8 @@ def prepare_transformer(pipeline_params: PredictPipelineParams):
     )
 
     transformer.fit(features)
-    with open(pipeline_params.transformer_path, "wb") as f:
-        pickle.dump(transformer, f)
+
+    return transformer
 
 
 def prepare_model(pipeline_params: PredictPipelineParams) -> None:
@@ -74,26 +86,26 @@ def prepare_model(pipeline_params: PredictPipelineParams) -> None:
         pipeline_params.input_data_path, pipeline_params.features, with_target=True
     )
 
-    with open(pipeline_params.transformer_path, "rb") as f:
-        transformer: CustomTransformerClass = pickle.load(f)
+    transformer = get_transformer(pipeline_params)
+    # transformer.fit(features)
 
-    features = transformer.transform(features)
+    # model.fit(features, targets)
+    pipeline = get_pipeline(transformer, model)
 
-    model.fit(features, targets)
+    pipeline.fit(features, targets)
+
     with open(pipeline_params.model_path, "wb") as f:
-        pickle.dump(model, f)
+        pickle.dump(pipeline, f)
 
 
 def prepare_predict_artefacts(pipeline_params: PredictPipelineParams):
     prepare_dataset(pipeline_params)
-    prepare_transformer(pipeline_params)
     prepare_model(pipeline_params)
 
 
 def remove_predict_artefacts(pipeline_params: PredictPipelineParams):
     os.remove(pipeline_params.input_data_path)
     os.remove(pipeline_params.model_path)
-    os.remove(pipeline_params.transformer_path)
 
 
 @dataclass()

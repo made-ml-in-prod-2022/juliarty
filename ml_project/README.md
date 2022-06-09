@@ -12,19 +12,19 @@ Download dataset:
 RUN train with default config:
 ```
    cd ml_project
-   python -m src.pipelines.train_pipeline
+   python -m ml_project.pipelines.train_pipeline
 ```
 
 RUN train with overrode config (all pipelines' configs are in configs/train_pipelines folder):
 ```
    cd ml_project
-   python -m src.pipelines.train_pipeline +train_pipelines=forest_train_pipeline
+   python -m ml_project.pipelines.train_pipeline +train_pipelines=forest_train_pipeline
 ```
 
 Run predict with default config:
 ```
     cd ml_project
-    python -m src.pipelines.predict_pipeline
+    python -m ml_project.pipelines.predict_pipeline
 ```
 RUN tests:
 ```
@@ -57,7 +57,7 @@ RUN tests:
 ├── outputs            <- Все артефакты создаваемые пайплайнами (модели, метрики, используемые конфигурационные файлы).  
 │   ├── train
 │   └── inference
-└── src                <- Исходный код.
+└── ml_project                <- Исходный код.
     ├── __init__.py    
     ├── tests
     └── pipelines
@@ -82,7 +82,7 @@ RUN tests:
             ├── predict_model.py  
             └── train_model.py    
 ```
-- Для тренировки модели и использования обученной модели созданы соответствующие пайплайны (src/pipelines).
+- Для тренировки модели и использования обученной модели созданы соответствующие пайплайны (ml_project/pipelines).
 - Проект имеет модульную структуру (за каждую часть пайплайна отвечает определенный пакет).
 - Для конфигурирования использована hydra.
 - Данные скачиваются с Google Drive.

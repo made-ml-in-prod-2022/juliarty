@@ -1,7 +1,7 @@
 import pytest
 
-from ml_project.src.pipelines.models import train, ModelParams
-from ml_project.src.tests.utils import generate_sample_dataset
+from ..pipelines.models import train, ModelParams
+from .utils import generate_sample_dataset
 
 
 class TestModelsModule:
