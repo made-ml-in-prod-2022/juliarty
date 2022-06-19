@@ -20,7 +20,7 @@ def _generate_synthetic_data(
     Args:
         exec_time: execution datetime in jinja datetime format for ds
     """
-    logger.info(f"Starting data generation.")
+    logger.info("Starting data generation.")
 
     rows_num = random.randint(a=100, b=1000)
     features_path = f"/opt/airflow/data/raw/{exec_time}/data.csv"
@@ -52,7 +52,7 @@ def _generate_synthetic_data(
     logger.info(f"Writing targets to {target_path}.")
     with open(target_path, "w", newline="") as csvfile:
         csv_writer = csv.writer(csvfile, delimiter=",")
-        csv_writer.writerow([target.name])
+        csv_writer.writerow([feature_params.target.name])
         for i in range(len(features)):
             csv_writer.writerow([target[i]])
 
@@ -67,5 +67,5 @@ with DAG(
     PythonOperator(
         task_id="generate_data",
         python_callable=_generate_synthetic_data,
-        op_kwargs={"ds": "{{ execution_date | ds }}",},
+        op_kwargs={"exec_time": "{{ execution_date | ds }}"},
     )
