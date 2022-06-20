@@ -23,34 +23,32 @@ from ml_project.pipelines.models import train, ModelParams
 from ml_project.pipelines.utils import get_pipeline
 from ml_project.pipelines.train_pipeline import pickle_object
 
+from utils import wait_for_data_func
+from config import (
+    CONFIG_FEATURES_PATH,
+    CONFIG_PREPROCESSING_PATH,
+    CONFIG_MODEL_PATH,
+    AIRFLOW_DATA_PATH,
+    DATA_PATH_FORMAT,
+    TARGET_PATH_FORMAT,
+)
+
 logger = logging.getLogger(__name__)
 
-data_path_format = "/opt/airflow/data/raw/{0}/data.csv"
-target_path_format = "/opt/airflow/data/raw/{0}/target.csv"
-processed_path_format = "/opt/airflow/data/processed/{0}/processed_data.csv"
-
-train_data_path_format = "/opt/airflow/data/processed/{0}/train_data.csv"
-val_data_path_format = "/opt/airflow/data/processed/{0}/val_data.csv"
-
-output_model_path_format = "/opt/airflow/data/models/{0}/model.pkl"
-output_metrics_path_format = "/opt/airflow/data/models/{0}/metrics.json"
-
-
-def _wait_for_data(execution_time: str):
-    """
-    Args:
-        execution_time: execution datetime
-    """
-    return os.path.exists(data_path_format.format(execution_time)) and os.path.exists(
-        target_path_format.format(execution_time)
-    )
+processed_path_format = os.path.join(
+    AIRFLOW_DATA_PATH, "processed/{0}/processed_data.csv"
+)
+train_data_path_format = os.path.join(AIRFLOW_DATA_PATH, "processed/{0}/train_data.csv")
+val_data_path_format = os.path.join(AIRFLOW_DATA_PATH, "processed/{0}/val_data.csv")
+output_model_path_format = os.path.join(AIRFLOW_DATA_PATH, "models/{0}/model.pkl")
+output_metrics_path_format = os.path.join(AIRFLOW_DATA_PATH, "models/{0}/metrics.json")
 
 
 def _prepare_train_data(execution_time: str) -> None:
     logger.info(f"Preparing train data. Datetime: {execution_time}")
     processed_data_path = processed_path_format.format(execution_time)
-    data_path = data_path_format.format(execution_time)
-    target_path = target_path_format.format(execution_time)
+    data_path = DATA_PATH_FORMAT.format(execution_time)
+    target_path = TARGET_PATH_FORMAT.format(execution_time)
 
     features_df = pd.read_csv(data_path)
     target_df = pd.read_csv(target_path)
@@ -93,9 +91,9 @@ def _get_configs(
 
 def _train_model(
     execution_time: str,
-    features_config_path: str = "/opt/airflow/dags/config/features.yaml",
-    preprocessing_config_path: str = "/opt/airflow/dags/config/preprocessing.yaml",
-    model_config_path: str = "/opt/airflow/dags/config/model.yaml",
+    features_config_path: str = CONFIG_FEATURES_PATH,
+    preprocessing_config_path: str = CONFIG_PREPROCESSING_PATH,
+    model_config_path: str = CONFIG_MODEL_PATH,
 ):
     logger.info("Training model.")
 
@@ -134,8 +132,7 @@ def _train_model(
 
 
 def _validate_model(
-    execution_time: str,
-    features_config_path: str = "/opt/airflow/dags/config/features.yaml",
+    execution_time: str, features_config_path: str = CONFIG_FEATURES_PATH,
 ):
     metrics_to_score_func = {
         "f1-score": f1_score,
@@ -177,12 +174,16 @@ with DAG(
 
     wait_for_data = PythonSensor(
         task_id="wait_for_data",
-        python_callable=_wait_for_data,
+        python_callable=wait_for_data_func,
         timeout=6000,
         poke_interval=10,
         retries=100,
         mode="poke",
-        op_kwargs={"execution_time": "{{ execution_date | ds }}"},
+        op_kwargs={
+            "execution_time": "{{ execution_date | ds }}",
+            "data_path_format": DATA_PATH_FORMAT,
+            "target_path_format": TARGET_PATH_FORMAT,
+        },
     )
 
     prepare_train_data = PythonOperator(

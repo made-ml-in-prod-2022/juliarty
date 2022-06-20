@@ -9,22 +9,23 @@ from marshmallow_dataclass import class_schema
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from ml_project.pipelines.data import generate_train_data, FeatureParams
+from config import CONFIG_FEATURES_PATH, DATA_PATH_FORMAT, TARGET_PATH_FORMAT
 
 logger = logging.getLogger(__name__)
 
 
 def _generate_synthetic_data(
-    exec_time: str, features_config_path: str = "/opt/airflow/dags/config/features.yaml"
+    execution_time: str, features_config_path: str = CONFIG_FEATURES_PATH
 ) -> None:
     """
     Args:
-        exec_time: execution datetime in jinja datetime format for ds
+        execution_time: execution datetime in jinja datetime format for ds
     """
     logger.info("Starting data generation.")
 
     rows_num = random.randint(a=100, b=1000)
-    features_path = f"/opt/airflow/data/raw/{exec_time}/data.csv"
-    target_path = f"/opt/airflow/data/raw/{exec_time}/target.csv"
+    features_path = DATA_PATH_FORMAT.format(execution_time)
+    target_path = TARGET_PATH_FORMAT.format(execution_time)
 
     if not os.path.exists(os.path.dirname(features_path)):
         logger.info(f"Current dir: {os.path.curdir}")
@@ -67,5 +68,5 @@ with DAG(
     PythonOperator(
         task_id="generate_data",
         python_callable=_generate_synthetic_data,
-        op_kwargs={"exec_time": "{{ execution_date | ds }}"},
+        op_kwargs={"execution_time": "{{ execution_date | ds }}"},
     )
